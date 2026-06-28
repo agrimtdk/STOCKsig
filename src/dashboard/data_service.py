@@ -7,15 +7,32 @@ import streamlit as st
 
 logger = logging.getLogger(__name__)
 
-BASE_DIR = r"c:\Users\Agrim Sharma\Desktop\StockSig"
-MODEL_PATH = os.path.join(BASE_DIR, "models", "calibrated_best.pkl")
-FEATURES_PATH = os.path.join(BASE_DIR, "data", "features", "features.parquet")
-SIGNALS_PATH = os.path.join(BASE_DIR, "data", "signals", "signals.parquet")
-EQUITY_CURVE_PATH = os.path.join(BASE_DIR, "reports", "equity_curve.parquet")
-TRADE_LOG_PATH = os.path.join(BASE_DIR, "reports", "trade_log.csv")
-FEAT_IMPORTANCE_PATH = os.path.join(BASE_DIR, "reports", "feature_importance.csv")
-BACKTEST_REPORT_PATH = os.path.join(BASE_DIR, "reports", "backtest_report.json")
-BENCHMARK_PATH = os.path.join(BASE_DIR, "reports", "benchmark_comparison.json")
+# Resolve project root dynamically
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+def get_resolved_path(primary_rel_path: str, fallback_filename: str) -> str:
+    """
+    Checks if primary file exists. If not, falls back to the demo folder.
+    """
+    primary_path = os.path.join(BASE_DIR, *primary_rel_path.split("/"))
+    if os.path.exists(primary_path):
+        return primary_path
+    
+    # Fallback to data/demo/filename
+    fallback_path = os.path.join(BASE_DIR, "data", "demo", fallback_filename)
+    if os.path.exists(fallback_path):
+        return fallback_path
+        
+    return primary_path
+
+MODEL_PATH = get_resolved_path("models/calibrated_best.pkl", "calibrated_best.pkl")
+FEATURES_PATH = get_resolved_path("data/features/features.parquet", "features.parquet")
+SIGNALS_PATH = get_resolved_path("data/signals/signals.parquet", "signals.parquet")
+EQUITY_CURVE_PATH = get_resolved_path("reports/equity_curve.parquet", "equity_curve.parquet")
+TRADE_LOG_PATH = get_resolved_path("reports/trade_log.csv", "trade_log.csv")
+FEAT_IMPORTANCE_PATH = get_resolved_path("reports/feature_importance.csv", "feature_importance.csv")
+BACKTEST_REPORT_PATH = get_resolved_path("reports/backtest_report.json", "backtest_report.json")
+BENCHMARK_PATH = get_resolved_path("reports/benchmark_comparison.json", "benchmark_comparison.json")
 
 @st.cache_resource
 def load_model():

@@ -1,0 +1,21 @@
+{
+    "benchmark_name": "^NSEI (NIFTY 50)",
+    "start_date": "2021-07-27",
+    "end_date": "2026-06-18",
+    "strategy": {
+        "total_return": 0.964939921472201,
+        "cagr": 0.1480438881156545,
+        "sharpe_ratio": 1.4954854957514172,
+        "max_drawdown": -0.08611987965800218
+    },
+    "benchmark": {
+        "total_return": 0.5348221154755551,
+        "cagr": 0.09151304983871378,
+        "sharpe_ratio": 0.7135579283310203,
+        "max_drawdown": -0.1722975608467007
+    },
+    "comparison": {
+        "alpha_return": 0.43011780599664584,
+        "alpha_cagr": 0.05653083827694072
+    }
+}

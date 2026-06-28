@@ -10,6 +10,7 @@ data/raw/
 data/features/
 data/predictions/
 data/signals/
+!data/demo/
 data/user/
 models/
 reports/
