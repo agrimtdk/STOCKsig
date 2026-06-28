@@ -732,8 +732,8 @@ def main():
                         mime="image/png",
                         key="export_price_chart"
                     )
-                except Exception as e:
-                    st.error(f"Chart export failed: {e}")
+                except Exception:
+                    st.warning("⚠ Chart export unavailable (kaleido not installed).")
                 
     elif page == "Backtest Analytics":
         st.markdown('<div style="margin-top: 16px;"></div>', unsafe_allow_html=True)
@@ -787,8 +787,8 @@ def main():
                             mime="image/png",
                             key="export_backtest_chart"
                         )
-                    except Exception as e:
-                        st.error(f"Chart export failed: {e}")
+                    except Exception:
+                        st.warning("⚠ Chart export unavailable (kaleido not installed).")
                 
     elif page == "Trade Log":
         st.markdown('<div style="margin-top: 16px;"></div>', unsafe_allow_html=True)
@@ -862,8 +862,8 @@ def main():
                         mime="image/png",
                         key="export_feat_chart"
                     )
-                except Exception as e:
-                    st.error(f"Chart export failed: {e}")
+                except Exception:
+                    st.warning("⚠ Chart export unavailable (kaleido not installed).")
         else:
             st.info("Feature importance data is empty or not available.")
             
@@ -999,8 +999,8 @@ def main():
                             mime="image/png",
                             key="export_replay_chart"
                         )
-                    except Exception as e:
-                        st.error(f"Chart export failed: {e}")
+                    except Exception:
+                        st.warning("⚠ Chart export unavailable (kaleido not installed).")
                 
             # Open Positions on Date
             with st.container(border=True):
