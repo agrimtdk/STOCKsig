@@ -1,0 +1,39 @@
+__pycache__/
+*.pyc
+.env
+mlruns/
+test_tmp/
+.venv/
+venv/
+
+data/raw/
+data/features/
+data/predictions/
+data/signals/
+data/user/
+models/
+reports/
+
+*.sqlite
+*.db
+
+# IDEs and OS files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+.DS_Store
+
+# Streamlit secrets and configs
+.streamlit/secrets.yaml
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Notebooks
+.ipynb_checkpoints/

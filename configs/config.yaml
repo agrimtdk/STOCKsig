@@ -1,0 +1,40 @@
+# Stock Signal Intelligence System Configuration
+
+project:
+  name: Stock Signal Intelligence System
+  version: 1.0.0
+
+stock_universe:
+  tickers:
+    - RELIANCE.NS
+    - TCS.NS
+    - INFY.NS
+    - HDFCBANK.NS
+    - ICICIBANK.NS
+    - SBIN.NS
+    - LT.NS
+    - ITC.NS
+    - BHARTIARTL.NS
+    - ASIANPAINT.NS
+
+data:
+  database_path: "data/stock_signals.sqlite"
+  raw_dir: "data/raw"
+  prices_dir: "data/raw/prices"
+  news_dir: "data/raw/news"
+  transcripts_dir: "data/raw/transcripts"
+
+ingestion:
+  start_years_ago: 5
+  retry_attempts: 5
+  retry_backoff_factor: 2.0  # seconds multiplier
+  retry_max_backoff: 30.0  # max seconds to wait
+
+logging:
+  log_file: "reports/logs/phase1.log"
+  log_level: "INFO"
+
+api_keys:
+  finnhub_api_key: null  # Optional: Will fallback to yfinance news feed or mocks if null
+  news_api_key: null     # Optional: Will fallback to yfinance news feed or mocks if null
+  fred_api_key: null     # Optional: Will fallback to defaults if null
