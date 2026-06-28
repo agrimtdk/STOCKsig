@@ -283,9 +283,35 @@ def get_live_signal_for_ticker(
     
     # 4. Prepare feature columns
     import json
-    feature_cols_path = r"c:\Users\Agrim Sharma\Desktop\StockSig\reports\feature_columns.json"
-    with open(feature_cols_path, 'r', encoding='utf-8') as f:
-        feature_cols = json.load(f)
+    from pathlib import Path
+    from src.dashboard.data_service import BASE_DIR
+    
+    primary_path = Path(BASE_DIR) / "reports" / "feature_columns.json"
+    fallback_path = Path(BASE_DIR) / "data" / "demo" / "feature_columns.json"
+    
+    feature_cols = None
+    if primary_path.exists():
+        try:
+            with open(primary_path, 'r', encoding='utf-8') as f:
+                feature_cols = json.load(f)
+        except Exception as e:
+            logger.error(f"Error reading primary feature_columns: {e}")
+            
+    if feature_cols is None and fallback_path.exists():
+        try:
+            with open(fallback_path, 'r', encoding='utf-8') as f:
+                feature_cols = json.load(f)
+        except Exception as e:
+            logger.error(f"Error reading fallback feature_columns: {e}")
+            
+    if feature_cols is None:
+        # Infer feature columns directly from the DataFrame columns
+        exclude_cols = {"ticker", "date", "label", "signal", "confidence"}
+        feature_cols = [c for c in df_stock.columns if c not in exclude_cols and pd.api.types.is_numeric_dtype(df_stock[c])]
+        logger.info(f"Inferred {len(feature_cols)} feature columns from DataFrame.")
+        
+    # Ensure all selected feature columns exist in the DataFrame
+    feature_cols = [c for c in feature_cols if c in df_stock.columns]
         
     # 5. Model prediction on the latest row
     latest_row = df_stock.iloc[[-1]]
