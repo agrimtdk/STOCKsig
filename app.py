@@ -5,7 +5,11 @@ import plotly.express as px
 import os
 import json
 import logging
+import importlib.util
 from datetime import datetime
+
+# Detect kaleido availability once at startup (needed for PNG chart export)
+KALEIDO_AVAILABLE = importlib.util.find_spec("kaleido") is not None
 
 # Set page config FIRST before any other streamlit commands
 st.set_page_config(
@@ -721,19 +725,22 @@ def main():
                 st.plotly_chart(fig, use_container_width=True, config={"toImageButtonOptions": {"filename": chart_fname}})
                 
                 # Export Chart button
-                try:
-                    img_bytes = fig.to_image(format="png")
-                    stock_clean = selected_ticker.replace(".", "_")
-                    export_name = f"price_chart_{stock_clean}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
-                    st.download_button(
-                        label="⬇ Export Chart",
-                        data=img_bytes,
-                        file_name=export_name,
-                        mime="image/png",
-                        key="export_price_chart"
-                    )
-                except Exception:
-                    st.warning("⚠ Chart export unavailable (kaleido not installed).")
+                if KALEIDO_AVAILABLE:
+                    try:
+                        stock_clean = selected_ticker.replace(".", "_")
+                        img_bytes = fig.to_image(format="png")
+                        export_name = f"price_chart_{stock_clean}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+                        st.download_button(
+                            label="⬇ Export Chart",
+                            data=img_bytes,
+                            file_name=export_name,
+                            mime="image/png",
+                            key="export_price_chart"
+                        )
+                    except Exception:
+                        pass
+                else:
+                    st.button("⬇ Export Chart", disabled=True, help="PNG export unavailable — install kaleido", key="export_price_chart_disabled")
                 
     elif page == "Backtest Analytics":
         st.markdown('<div style="margin-top: 16px;"></div>', unsafe_allow_html=True)
@@ -777,18 +784,21 @@ def main():
                     st.plotly_chart(fig, use_container_width=True, config={"toImageButtonOptions": {"filename": bt_fname}})
                     
                     # Export Chart button
-                    try:
-                        img_bytes = fig.to_image(format="png")
-                        export_name = f"backtest_portfolio_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
-                        st.download_button(
-                            label="⬇ Export Chart",
-                            data=img_bytes,
-                            file_name=export_name,
-                            mime="image/png",
-                            key="export_backtest_chart"
-                        )
-                    except Exception:
-                        st.warning("⚠ Chart export unavailable (kaleido not installed).")
+                    if KALEIDO_AVAILABLE:
+                        try:
+                            img_bytes = fig.to_image(format="png")
+                            export_name = f"backtest_portfolio_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+                            st.download_button(
+                                label="⬇ Export Chart",
+                                data=img_bytes,
+                                file_name=export_name,
+                                mime="image/png",
+                                key="export_backtest_chart"
+                            )
+                        except Exception:
+                            pass
+                    else:
+                        st.button("⬇ Export Chart", disabled=True, help="PNG export unavailable — install kaleido", key="export_backtest_chart_disabled")
                 
     elif page == "Trade Log":
         st.markdown('<div style="margin-top: 16px;"></div>', unsafe_allow_html=True)
@@ -852,18 +862,21 @@ def main():
                 st.plotly_chart(fig, use_container_width=True, config={"toImageButtonOptions": {"filename": feat_fname}})
                 
                 # Export Chart button
-                try:
-                    img_bytes = fig.to_image(format="png")
-                    export_name = f"features_portfolio_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
-                    st.download_button(
-                        label="⬇ Export Chart",
-                        data=img_bytes,
-                        file_name=export_name,
-                        mime="image/png",
-                        key="export_feat_chart"
-                    )
-                except Exception:
-                    st.warning("⚠ Chart export unavailable (kaleido not installed).")
+                if KALEIDO_AVAILABLE:
+                    try:
+                        img_bytes = fig.to_image(format="png")
+                        export_name = f"features_portfolio_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+                        st.download_button(
+                            label="⬇ Export Chart",
+                            data=img_bytes,
+                            file_name=export_name,
+                            mime="image/png",
+                            key="export_feat_chart"
+                        )
+                    except Exception:
+                        pass
+                else:
+                    st.button("⬇ Export Chart", disabled=True, help="PNG export unavailable — install kaleido", key="export_feat_chart_disabled")
         else:
             st.info("Feature importance data is empty or not available.")
             
@@ -989,18 +1002,21 @@ def main():
                     st.plotly_chart(fig, use_container_width=True, config={"toImageButtonOptions": {"filename": replay_fname}})
                     
                     # Export Chart button
-                    try:
-                        img_bytes = fig.to_image(format="png")
-                        export_name = f"replay_portfolio_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
-                        st.download_button(
-                            label="⬇ Export Chart",
-                            data=img_bytes,
-                            file_name=export_name,
-                            mime="image/png",
-                            key="export_replay_chart"
-                        )
-                    except Exception:
-                        st.warning("⚠ Chart export unavailable (kaleido not installed).")
+                    if KALEIDO_AVAILABLE:
+                        try:
+                            img_bytes = fig.to_image(format="png")
+                            export_name = f"replay_portfolio_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+                            st.download_button(
+                                label="⬇ Export Chart",
+                                data=img_bytes,
+                                file_name=export_name,
+                                mime="image/png",
+                                key="export_replay_chart"
+                            )
+                        except Exception:
+                            pass
+                    else:
+                        st.button("⬇ Export Chart", disabled=True, help="PNG export unavailable — install kaleido", key="export_replay_chart_disabled")
                 
             # Open Positions on Date
             with st.container(border=True):
